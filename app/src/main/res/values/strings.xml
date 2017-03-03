@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tweeter_api_key" translatable="false">IjGWuBNAJPvcyHG7rFVJ4c0TX</string>
+    <string name="tweeter_api_secret" translatable="false">yFbR2fc6bQRRaQWAIyWCjHole8BZ9hbbtAeqTjxycsfJHlAIfN</string>
 
     <string name="app_name">Rest Client Template</string>
-    <string name="login_label">Log in</string>
+    <string name="viewer_name">Home Timeline</string>
+
+    <string name="login_label">Connect to Twitter</string>
 
 </resources>
