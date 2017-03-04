@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:title="@string/viewer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
-        android:id="@+id/content_layout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/progrss_bottom"
+        android:layout_below="@id/toolbar" />
 
+    <ProgressBar
+        android:id="@id/progrss_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
