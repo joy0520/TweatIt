@@ -4,8 +4,15 @@
     <string name="tweeter_api_secret" translatable="false">yFbR2fc6bQRRaQWAIyWCjHole8BZ9hbbtAeqTjxycsfJHlAIfN</string>
 
     <string name="app_name">Tweet It Simple</string>
-    <string name="viewer_name">Home Timeline</string>
+    <string name="main_viewer">Home Timeline</string>
 
     <string name="login_label">Connect to Twitter</string>
+
+    <string name="main_viewer_menu_item_compose">Compose</string>
+
+    <string name="compose_dialog">New Tweet</string>
+    <string name="compose_dialog_hint">Write your new tweet here</string>
+    <string name="compose_dialog_post">Tweet it!</string>
+    <string name="compose_dialog_cancel">Cancel</string>
 
 </resources>

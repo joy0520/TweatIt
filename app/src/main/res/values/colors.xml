@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#29b6f6</color>
+    <color name="colorPrimaryDark">#0277bd</color>
+    <color name="textColorPrimary">#f5f5f5</color>
+    
     <color name="item_tweet_name">#000000</color>
     <color name="item_tweet_sub_name">#b5000000</color>
+    
+    <drawable name="dialog_title_bar_background">@color/colorPrimary</drawable>
 </resources>

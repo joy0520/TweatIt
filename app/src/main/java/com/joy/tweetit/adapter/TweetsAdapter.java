@@ -1,4 +1,4 @@
-package com.joy.tweetit;
+package com.joy.tweetit.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.joy.tweetit.R;
 import com.joy.tweetit.model.Tweet;
 
 import java.util.ArrayList;
@@ -30,6 +31,11 @@ public class TweetsAdapter extends RecyclerView.Adapter {
         super();
         mContext = context;
         mList = new ArrayList<>();
+    }
+
+    public void postTweeting(Tweet tweet) {
+        mList.add(0, tweet);
+        notifyItemInserted(0);
     }
 
     public void addTweets(List<Tweet> tweets) {
@@ -96,7 +102,7 @@ public class TweetsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    abstract static class EndlessScrollListener extends RecyclerView.OnScrollListener {
+    public abstract static class EndlessScrollListener extends RecyclerView.OnScrollListener {
         // True if we are still waiting for the last set of data to load.
         private boolean loading = false;
 
