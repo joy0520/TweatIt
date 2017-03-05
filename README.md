@@ -2,7 +2,7 @@
 
 **TweetIt** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **18** hours spent in total
+Time spent: **18.5** hours spent in total
 
 ## User Stories
 
@@ -47,6 +47,7 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 * [X] Check if network available.
+* [X] Back button would leave app rather than going back to the login activity, which leads to a situation that user cannot leave app through back key.
 
 ## Video Walkthrough
 
