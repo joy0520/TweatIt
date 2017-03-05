@@ -6,10 +6,13 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import org.parceler.Parcel;
+
 /**
  * Created by joy0520 on 2017/3/5.
  */
 
+@Parcel
 @Table(database = MyDatabase.class)
 public class User extends BaseModel {
 

@@ -17,4 +17,11 @@
     <dimen name="item_tweet_name_size">18sp</dimen>
     <dimen name="item_tweet_sub_name_size">14sp</dimen>
 
+    <dimen name="dialog_tweet_detail_image_size">80dp</dimen>
+    <dimen name="dialog_tweet_detail_image_padding">8dp</dimen>
+    <dimen name="dialog_tweet_detail_name_size">24sp</dimen>
+    <dimen name="dialog_tweet_detail_name_padding">2dp</dimen>
+    <dimen name="dialog_tweet_detail_user_name_size">20sp</dimen>
+    <dimen name="dialog_tweet_detail_content_size">24sp</dimen>
+
 </resources>

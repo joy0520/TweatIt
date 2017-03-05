@@ -30,6 +30,7 @@ import com.joy.tweetit.R;
 import com.joy.tweetit.TweetItApplication;
 import com.joy.tweetit.adapter.TweetsAdapter;
 import com.joy.tweetit.dialog.ComposeDialog;
+import com.joy.tweetit.dialog.DetailDialog;
 import com.joy.tweetit.model.Tweet;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -42,13 +43,13 @@ import cz.msebera.android.httpclient.Header;
  * Created by joy0520 on 2017/3/3.
  */
 
-public class HomeTimelineActivity extends AppCompatActivity implements ComposeDialog.Callback {
+public class HomeTimelineActivity extends AppCompatActivity implements ComposeDialog.Callback, TweetsAdapter.Callback {
     private static final String TAG = "HomeTimelineActivity.";
     private static final int INTERVAL_CHECK_NET_MS = 30000;
     private static final int INTERVAL_AUTO_COLLAPSE_APPBAR_MS = 5000;
     private static final String SHARED_PREFS_TWEET_DRAFT_KEY = "tweet_draft";
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mList;
@@ -128,6 +129,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
 
         // Adapter
         mAdapter = new TweetsAdapter(this);
+        mAdapter.setCallback(this);
         mManager = new LinearLayoutManager(this);
         mScrollListener = new TweetsAdapter.EndlessScrollListener(mManager) {
             @Override
@@ -224,6 +226,13 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
     }
 
     @Override
+    public void onOpenDetailDialog(Tweet tweet) {
+        FragmentManager fm = getSupportFragmentManager();
+        DetailDialog dialog = DetailDialog.newInstance(tweet);
+        dialog.show(fm, "fragment_detail_dialog");
+    }
+
+    @Override
     public void onCancelNewTweet(String newTweet) {
         saveTweetDraft(newTweet);
     }
@@ -232,7 +241,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         FragmentManager fm = getSupportFragmentManager();
         ComposeDialog dialog = ComposeDialog.newInstance(getString(R.string.compose_dialog), getTweetDraft());
         dialog.setCallback(this);
-        dialog.show(fm, "fragment_setting_dialog");
+        dialog.show(fm, "fragment_compose_dialog");
     }
 
     private void populateHomeTimeline() {

@@ -12,6 +12,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Minutes;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ import java.util.Locale;
  * Created by joy0520 on 2017/3/3.
  */
 
+@Parcel
 @Table(database = MyDatabase.class)
 public class Tweet extends BaseModel implements Comparable<Tweet> {
 

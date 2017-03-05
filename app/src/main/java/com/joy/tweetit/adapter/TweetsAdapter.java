@@ -1,6 +1,7 @@
 package com.joy.tweetit.adapter;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.joy.tweetit.R;
 import com.joy.tweetit.activity.HomeTimelineActivity;
+import com.joy.tweetit.dialog.ComposeDialog;
+import com.joy.tweetit.dialog.DetailDialog;
 import com.joy.tweetit.model.Tweet;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -87,8 +90,14 @@ public class TweetsAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public interface Callback {
+        void onOpenDetailDialog(Tweet tweet);
+    }
+
     private List<Tweet> mList;
     private Context mContext;
+
+    private Callback mCallback;
 
     public TweetsAdapter(Context context) {
         super();
@@ -128,7 +137,7 @@ public class TweetsAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Tweet tweet = mList.get(position);
+        final Tweet tweet = mList.get(position);
         if (holder instanceof TweetHolder) {
             TweetHolder tweetHolder = (TweetHolder) holder;
             // Setup view content
@@ -146,8 +155,9 @@ public class TweetsAdapter extends RecyclerView.Adapter {
             tweetHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("onBindViewHolder", "card view click");
-
+                    if (mCallback != null) {
+                        mCallback.onOpenDetailDialog(tweet);
+                    }
                 }
             });
         }
@@ -181,6 +191,10 @@ public class TweetsAdapter extends RecyclerView.Adapter {
         mList.addAll(loadTweetsFromDB());
         Collections.sort(mList);
         notifyDataSetChanged();
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
     }
 
 }
