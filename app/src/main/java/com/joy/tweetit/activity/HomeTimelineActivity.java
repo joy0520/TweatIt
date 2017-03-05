@@ -1,7 +1,9 @@
 package com.joy.tweetit.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +45,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
     private static final String TAG = "HomeTimelineActivity.";
     private static final int INTERVAL_CHECK_NET_MS = 30000;
     private static final int INTERVAL_AUTO_COLLAPSE_APPBAR_MS = 5000;
+    private static final String SHARED_PREFS_TWEET_DRAFT_KEY = "tweet_draft";
 
     public static final boolean DEBUG = true;
 
@@ -189,7 +192,8 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
 
     @Override
     public void onPostNewTweet(String newTweetBody) {
-        Log.i("onPostNewTweet()", "newTweetBody=" + newTweetBody);
+        if (DEBUG) Log.i("onPostNewTweet()", "newTweetBody=" + newTweetBody);
+        if (newTweetBody == null || newTweetBody.isEmpty()) return;
         TweetItApplication.getRestClient().postTweet(newTweetBody,
                 new TextHttpResponseHandler() {
                     @Override
@@ -212,9 +216,14 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
                 });
     }
 
+    @Override
+    public void onCancelNewTweet(String newTweet) {
+        saveTweetDraft(newTweet);
+    }
+
     private void showComposeDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        ComposeDialog dialog = ComposeDialog.newInstance(getString(R.string.compose_dialog));
+        ComposeDialog dialog = ComposeDialog.newInstance(getString(R.string.compose_dialog), getTweetDraft());
         dialog.setCallback(this);
         dialog.show(fm, "fragment_setting_dialog");
     }
@@ -278,5 +287,27 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
                 }
             }
         });
+    }
+
+    private void saveTweetDraft(String tweetBody) {
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(SHARED_PREFS_TWEET_DRAFT_KEY, tweetBody);
+        edit.apply();
+    }
+
+    private String getTweetDraft() {
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        return pref.getString(SHARED_PREFS_TWEET_DRAFT_KEY, "");
+    }
+
+    private void clearTweetDraft() {
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(SHARED_PREFS_TWEET_DRAFT_KEY, "");
+        edit.apply();
     }
 }

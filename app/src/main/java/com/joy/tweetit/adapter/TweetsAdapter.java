@@ -1,6 +1,7 @@
 package com.joy.tweetit.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.joy.tweetit.R;
+import com.joy.tweetit.activity.HomeTimelineActivity;
 import com.joy.tweetit.model.Tweet;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -30,6 +32,7 @@ public class TweetsAdapter extends RecyclerView.Adapter {
     static class TweetHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView name, userName, text, timeStamp;
+        private CardView cardView;
 
         public TweetHolder(View itemView) {
             super(itemView);
@@ -38,6 +41,7 @@ public class TweetsAdapter extends RecyclerView.Adapter {
             userName = (TextView) itemView.findViewById(R.id.user_name);
             text = (TextView) itemView.findViewById(R.id.text);
             timeStamp = (TextView) itemView.findViewById(R.id.time_stamp);
+            cardView = (CardView) itemView.findViewById(R.id.card);
         }
     }
 
@@ -66,9 +70,11 @@ public class TweetsAdapter extends RecyclerView.Adapter {
                 visibleItemCount = mManager.getChildCount();
                 totalItemCount = mManager.getItemCount();
                 lastVisibleItem = mManager.findLastVisibleItemPosition();
-                Log.i("onScrolled()", "visibleItemCount=" + visibleItemCount
-                        + ", totalItemCount=" + totalItemCount
-                        + ", lastVisibleItem=" + lastVisibleItem);
+                if (HomeTimelineActivity.DEBUG) {
+                    Log.i("onScrolled()", "visibleItemCount=" + visibleItemCount
+                            + ", totalItemCount=" + totalItemCount
+                            + ", lastVisibleItem=" + lastVisibleItem);
+                }
 
                 if (!loading) {
                     if ((visibleItemCount + lastVisibleItem) >= totalItemCount) {
@@ -129,9 +135,6 @@ public class TweetsAdapter extends RecyclerView.Adapter {
             Glide.with(mContext)
                     .load(tweet.getProfileImageUrl())
                     .fitCenter()
-//                    .placeholder(R.drawable.ic_image_placeholder)
-//                    .override(mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size),
-//                            mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(tweetHolder.image);
 
@@ -140,6 +143,13 @@ public class TweetsAdapter extends RecyclerView.Adapter {
             tweetHolder.text.setText(tweet.getText());
             tweetHolder.timeStamp.setText(tweet.getCreatedAtFormatString());
             // Setup click event
+            tweetHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("onBindViewHolder", "card view click");
+
+                }
+            });
         }
     }
 
