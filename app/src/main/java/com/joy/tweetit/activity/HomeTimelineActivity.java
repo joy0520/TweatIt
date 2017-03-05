@@ -3,6 +3,7 @@ package com.joy.tweetit.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -40,19 +41,31 @@ import cz.msebera.android.httpclient.Header;
 public class HomeTimelineActivity extends AppCompatActivity implements ComposeDialog.Callback {
     private static final String TAG = "HomeTimelineActivity.";
     private static final int INTERVAL_CHECK_NET_MS = 30000;
+    private static final int INTERVAL_AUTO_COLLAPSE_APPBAR_MS = 5000;
 
     public static final boolean DEBUG = true;
 
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mList;
+    private AppBarLayout mAppbarLayout;
     private Toolbar mToolbar;
     private TextView mNoNetwork;
     private ProgressBar mProgressBottom;
 
     private TweetsAdapter mAdapter;
+    private LinearLayoutManager mManager;
     private int mCurrentMaxPage = 0;
-    TweetsAdapter.EndlessScrollListener mScrollListener;
-    LinearLayoutManager mManager;
+    private TweetsAdapter.EndlessScrollListener mScrollListener;
+    private boolean mScrolling;
+    private Runnable mCollapseAppbarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mScrolling = false;
+            if (mAppbarLayout != null && !mScrolling) {
+                mAppbarLayout.setExpanded(false);
+            }
+        }
+    };
 
     private boolean mPreNetworkState;
     private Handler mHandler;
@@ -83,6 +96,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         // Init views
         mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swpip_refresh);
         mList = (RecyclerView) findViewById(R.id.list);
+        mAppbarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNoNetwork = (TextView) findViewById(R.id.no_network);
         mProgressBottom = (ProgressBar) findViewById(R.id.progrss_bottom);
@@ -92,6 +106,8 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
             @Override
             public void onRefresh() {
                 populateHomeTimeline();
+                mHandler.removeCallbacks(mCollapseAppbarRunnable);
+                mHandler.postDelayed(mCollapseAppbarRunnable, INTERVAL_AUTO_COLLAPSE_APPBAR_MS);
             }
         });
         // Configure the refreshing colors
@@ -99,7 +115,6 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
         // Setup toolbar
         setSupportActionBar(mToolbar);
@@ -109,12 +124,19 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         mManager = new LinearLayoutManager(this);
         mScrollListener = new TweetsAdapter.EndlessScrollListener(mManager) {
             @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mScrolling = true;
+                mHandler.removeCallbacks(mCollapseAppbarRunnable);
+                mHandler.postDelayed(mCollapseAppbarRunnable, INTERVAL_AUTO_COLLAPSE_APPBAR_MS);
+            }
+
+            @Override
             public void onLoadMore() {
                 Log.i("onLoadMore", "load more!");
                 populateHomeTimeline(mCurrentMaxPage + 1);
             }
         };
-
         mList.setAdapter(mAdapter);
         mList.setLayoutManager(mManager);
         mList.addOnScrollListener(mScrollListener);
