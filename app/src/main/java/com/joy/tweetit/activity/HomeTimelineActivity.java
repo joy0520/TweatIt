@@ -94,7 +94,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         setContentView(R.layout.activity_main_viewer);
 
         // Init views
-        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swpip_refresh);
+        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         mList = (RecyclerView) findViewById(R.id.list);
         mAppbarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,7 +128,12 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
                 super.onScrolled(recyclerView, dx, dy);
                 mScrolling = true;
                 mHandler.removeCallbacks(mCollapseAppbarRunnable);
-                mHandler.postDelayed(mCollapseAppbarRunnable, INTERVAL_AUTO_COLLAPSE_APPBAR_MS);
+                if (mManager != null && mManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                    // On top most of the list, hide app bar immediately.
+                    mAppbarLayout.setExpanded(false);
+                } else {
+                    mHandler.postDelayed(mCollapseAppbarRunnable, INTERVAL_AUTO_COLLAPSE_APPBAR_MS);
+                }
             }
 
             @Override
@@ -146,7 +151,6 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
 
         // Load first page
         populateHomeTimeline();
-        mProgressBottom.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -209,6 +213,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         mCurrentMaxPage = 0;
         mAdapter.clearAll();
         if (NetworkCheck.isOnlineAndAvailable(this)) {
+            mProgressBottom.setVisibility(View.VISIBLE);
             populateHomeTimeline(0);
         } else {
             mNoNetwork.setVisibility(View.VISIBLE);
@@ -235,7 +240,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         TweetItApplication.getRestClient().getHomeTimeline(page, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mProgressBottom.setVisibility(View.VISIBLE);
+                mProgressBottom.setVisibility(View.GONE);
                 Toast.makeText(HomeTimelineActivity.this, "failed to load home timeline:\n" + responseString,
                         Toast.LENGTH_SHORT).show();
                 mSwipeRefresh.setRefreshing(false);

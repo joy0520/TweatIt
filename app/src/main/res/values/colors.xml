@@ -7,7 +7,9 @@
 
     <color name="main_viewer_no_network">#e01d1d</color>
     <color name="main_viewer_new_tweets">@color/textColorSecond</color>
-    
+
+    <color name="item_tweet_card_bg">#bdbdbd</color>
+    <color name="item_tweet_card_content_bg">#FFFFFF</color>
     <color name="item_tweet_name">#000000</color>
     <color name="item_tweet_sub_name">#b5000000</color>
     
