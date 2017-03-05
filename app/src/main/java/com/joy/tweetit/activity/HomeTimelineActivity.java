@@ -1,5 +1,6 @@
 package com.joy.tweetit.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -176,17 +177,23 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_viewer, menu);
+        inflater.inflate(R.menu.menu_main_viewer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.toolbar_compose:
-//                showComposeDialog();
-//                return true;
-//        }
+        switch (item.getItemId()) {
+            case R.id.toolbar_compose:
+                showComposeDialog();
+                return true;
+            case R.id.toolbar_logout:
+                // Log out
+                clearTweetDraft();
+                TweetItApplication.getRestClient().clearAccessToken();
+                startActivity(new Intent(this, LoginActivity.class));
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

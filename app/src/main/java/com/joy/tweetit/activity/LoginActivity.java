@@ -43,6 +43,12 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
         e.printStackTrace();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     // Click handler method for the button used to start OAuth flow
     // Uses the client to initiate OAuth authorization
     // This should be tied to a button used to login

@@ -37,7 +37,8 @@
 
         <activity
             android:name=".activity.HomeTimelineActivity"
-            android:label="@string/main_viewer" />
+            android:label="@string/main_viewer"
+            android:noHistory="true" />
     </application>
 
 </manifest>
