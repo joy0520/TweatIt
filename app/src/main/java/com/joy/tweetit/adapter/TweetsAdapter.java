@@ -15,8 +15,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.joy.tweetit.R;
 import com.joy.tweetit.model.Tweet;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,70 +27,6 @@ import java.util.List;
  */
 
 public class TweetsAdapter extends RecyclerView.Adapter {
-    private List<Tweet> mList;
-    private Context mContext;
-
-    public TweetsAdapter(Context context) {
-        super();
-        mContext = context;
-        mList = new ArrayList<>();
-    }
-
-    public void postTweeting(Tweet tweet) {
-        mList.add(0, tweet);
-        notifyItemInserted(0);
-    }
-
-    public void addTweets(List<Tweet> tweets) {
-        mList.addAll(tweets);
-        notifyDataSetChanged();
-    }
-
-    public void clearAll() {
-        mList.clear();
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.item_tweet, parent, false);
-        return new TweetHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Tweet tweet = mList.get(position);
-        if (holder instanceof TweetHolder) {
-            TweetHolder tweetHolder = (TweetHolder) holder;
-            // Setup view content
-            Glide.with(mContext)
-                    .load(tweet.getProfileImageUrl())
-                    .fitCenter()
-//                    .placeholder(R.drawable.ic_image_placeholder)
-//                    .override(mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size),
-//                            mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(tweetHolder.image);
-
-            tweetHolder.name.setText(tweet.getName());
-            tweetHolder.userName.setText(String.format("@%s", tweet.getScreenName()));
-            tweetHolder.text.setText(tweet.getText());
-            tweetHolder.timeStamp.setText(tweet.getCreated_at());
-            // Setup click event
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mList.size();
-    }
-
     static class TweetHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView name, userName, text, timeStamp;
@@ -141,4 +80,97 @@ public class TweetsAdapter extends RecyclerView.Adapter {
             }
         }
     }
+
+    private List<Tweet> mList;
+    private Context mContext;
+
+    public TweetsAdapter(Context context) {
+        super();
+        mContext = context;
+        mList = new ArrayList<>();
+    }
+
+    public void postTweeting(Tweet tweet) {
+        mList.add(0, tweet);
+        saveTweets(mList);
+        notifyItemInserted(0);
+    }
+
+    public void addTweets(List<Tweet> tweets) {
+        mList.addAll(tweets);
+        saveTweets(mList);
+        notifyDataSetChanged();
+    }
+
+    public void clearAll() {
+        mList.clear();
+        deleteSavedTweets(mList);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View view = inflater.inflate(R.layout.item_tweet, parent, false);
+        return new TweetHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Tweet tweet = mList.get(position);
+        if (holder instanceof TweetHolder) {
+            TweetHolder tweetHolder = (TweetHolder) holder;
+            // Setup view content
+            Glide.with(mContext)
+                    .load(tweet.getProfileImageUrl())
+                    .fitCenter()
+//                    .placeholder(R.drawable.ic_image_placeholder)
+//                    .override(mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size),
+//                            mContext.getResources().getDimensionPixelSize(R.dimen.item_tweet_image_size))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(tweetHolder.image);
+
+            tweetHolder.name.setText(tweet.getName());
+            tweetHolder.userName.setText(String.format("@%s", tweet.getScreenName()));
+            tweetHolder.text.setText(tweet.getText());
+            tweetHolder.timeStamp.setText(tweet.getCreatedAtFormatString());
+            // Setup click event
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mList.size();
+    }
+
+
+    // TODO do this on another thread
+    private void saveTweets(final List<Tweet> tweets) {
+        for (Tweet tweet : tweets) {
+            tweet.save();
+        }
+    }
+
+    private void deleteSavedTweets(final List<Tweet> tweets) {
+        for (Tweet tweet : tweets) {
+            tweet.delete();
+        }
+    }
+
+    private List<Tweet> loadTweetsFromDB() {
+        return SQLite.select().from(Tweet.class).queryList();
+    }
+
+    public void applyLocalTweets() {
+        mList.clear();
+        mList.addAll(loadTweetsFromDB());
+        Collections.sort(mList);
+        notifyDataSetChanged();
+    }
+
 }

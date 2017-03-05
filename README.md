@@ -2,7 +2,7 @@
 
 **TweetIt** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **15.5** hours spent in total
+Time spent: **18** hours spent in total
 
 ## User Stories
 
@@ -23,8 +23,8 @@ The following **optional** features are implemented:
 
 * [X] User can **see a counter with total number of characters left for tweet** on compose tweet page
 * [X] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
-* [ ] User can **pull down to refresh tweets timeline**
-* [ ] User can **open the twitter app offline and see last loaded tweets**. Persisted in SQLite tweets are refreshed on every application launch. While "live data" is displayed when app can get it from Twitter API, it is also saved for use in offline mode.
+* [X] User can **pull down to refresh tweets timeline**
+* [X] User can **open the twitter app offline and see last loaded tweets**. Persisted in SQLite tweets are refreshed on every application launch. While "live data" is displayed when app can get it from Twitter API, it is also saved for use in offline mode.
 * [ ] User can tap a tweet to **open a detailed tweet view**
 * [ ] User can **select "reply" from detail view to respond to a tweet**
 * [ ] Improve the user interface and theme the app to feel "twitter branded"
@@ -46,7 +46,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [X] Check if network available.
 
 ## Video Walkthrough
 
@@ -63,7 +63,13 @@ Describe any challenges encountered while building the app.
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
-- [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Android Support Design](https://developer.android.com/topic/libraries/support-library/index.html) - Android support deign library
+- [Android Support v7](https://developer.android.com/topic/libraries/support-library/setup.html) - Android support library
+- [DBFLow](https://github.com/Raizlabs/DBFlow) - A blazing fast, powerful, and very simple ORM android database library that writes database code for you.
+- [Glide](https://github.com/bumptech/glide) - An image loading and caching library for Android focused on smooth scrolling
+- [Gson](https://github.com/google/gson) - A Java serialization/deserialization library that can convert Java Objects into JSON and back
+- [Joda-time-android](https://github.com/dlew/joda-time-android) - Joda-Time library with Android specialization
+- [Stetho](http://facebook.github.io/stetho/) - A debug bridge for Android applications
 
 ## License
 

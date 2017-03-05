@@ -11,18 +11,38 @@
         android:layout_height="wrap_content"
         android:title="@string/main_viewer" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
+    <TextView
+        android:id="@+id/no_network"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/main_viewer_no_network"
+        android:textColor="@color/main_viewer_no_network"
+        android:textSize="@dimen/main_viewer_no_network"
+        android:visibility="gone" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swpip_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/progrss_bottom"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/no_network">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/no_network" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@id/progrss_bottom"
+        android:id="@+id/progrss_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_below="@id/swpip_refresh"
+        android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
 </RelativeLayout>
