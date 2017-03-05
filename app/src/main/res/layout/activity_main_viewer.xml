@@ -46,7 +46,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scrollbarAlwaysDrawVerticalTrack="true" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -60,6 +61,15 @@
             android:visibility="gone" />
 
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/floating_button_margin"
+        android:src="@drawable/ic_compose"
+        app:elevation="@dimen/floating_button_elevation" />
 </android.support.design.widget.CoordinatorLayout>
 
     <!--

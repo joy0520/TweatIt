@@ -6,6 +6,9 @@
 
     <dimen name="main_viewer_no_network">20sp</dimen>
 
+    <dimen name="floating_button_margin">10dp</dimen>
+    <dimen name="floating_button_elevation">4dp</dimen>
+
     <dimen name="item_tweet_height">80dp</dimen>
     <dimen name="item_tweet_margin_vertical">1dp</dimen>
     <dimen name="item_tweet_margin_horizontal">4dp</dimen>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
     private Toolbar mToolbar;
     private TextView mNoNetwork;
     private ProgressBar mProgressBottom;
+    private FloatingActionButton mFloatingButton;
 
     private TweetsAdapter mAdapter;
     private LinearLayoutManager mManager;
@@ -100,6 +102,7 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNoNetwork = (TextView) findViewById(R.id.no_network);
         mProgressBottom = (ProgressBar) findViewById(R.id.progrss_bottom);
+        mFloatingButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
 
         // Setup SwipeRefreshLayout
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -149,6 +152,14 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
         mHandler = new Handler();
         mHandler.post(mCheckNetRunnable);
 
+        // Floating Action Button
+        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showComposeDialog();
+            }
+        });
+
         // Load first page
         populateHomeTimeline();
     }
@@ -168,11 +179,11 @@ public class HomeTimelineActivity extends AppCompatActivity implements ComposeDi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.toolbar_compose:
-                showComposeDialog();
-                return true;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.toolbar_compose:
+//                showComposeDialog();
+//                return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
